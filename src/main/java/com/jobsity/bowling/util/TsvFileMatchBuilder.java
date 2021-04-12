@@ -1,5 +1,6 @@
 package com.jobsity.bowling.util;
 
+import com.jobsity.bowling.exception.RuleError;
 import com.jobsity.bowling.match.Player;
 import com.jobsity.bowling.roll.Roll;
 import com.jobsity.bowling.roll.RollParser;
@@ -79,6 +80,9 @@ public class TsvFileMatchBuilder implements MatchBuilder<String> {
         Map<String, List<Roll>> playerAndRolls = new HashMap<>();
         results.forEach(result -> {
             String[] playerAndResult = result.split("\\s+");
+            if(playerAndResult.length != 2) {
+                throw new InvalidMatchException(RuleError.INVALID_FILE_DATA);
+            }
             String player = playerAndResult[0];
             String roll = playerAndResult[1];
             List<Roll> rolls = playerAndRolls.get(player);
@@ -105,7 +109,7 @@ public class TsvFileMatchBuilder implements MatchBuilder<String> {
                         player.getFrames().size() > MAX_TEN_PIN_FRAMES);
 
         if (isInvalidTenPinMatch) {
-            throw new InvalidMatchException();
+            throw new InvalidMatchException(RuleError.INVALID_FRAMES_QTY);
         }
 
         match.addPlayer(players);

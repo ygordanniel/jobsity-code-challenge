@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         if(Objects.isNull(args) || args.length == 0) {
             System.out.println("Please provide a file path with the Match data.");
+            System.exit(0);
         }
         MatchBuilder<String> tsvFileMatchBuilder = new TsvFileMatchBuilder();
         Match match = tsvFileMatchBuilder.build(args[0]);

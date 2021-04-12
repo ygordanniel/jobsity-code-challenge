@@ -1,6 +1,7 @@
 package com.jobsity.bowling.util;
 
 import com.jobsity.bowling.exception.InvalidMatchException;
+import com.jobsity.bowling.exception.RuleError;
 import com.jobsity.bowling.match.Match;
 import com.jobsity.bowling.match.Player;
 import org.junit.jupiter.api.DisplayName;
@@ -63,10 +64,21 @@ class TsvFileMatchBuilderTest {
     }
 
     @Test
-    @DisplayName("Should throws InvalidMatchException")
-    public void should_throws_invalid_match_exception() {
-        String file = "invalid_match.txt";
-        assertThrows(InvalidMatchException.class, () -> builder.build(Thread.currentThread().getContextClassLoader().getResource(file).getPath()));
+    @DisplayName("Should throws InvalidMatchException for RuleError.INVALID_FRAMES_QTY")
+    public void should_throws_invalid_match_exception_for_frames_quantity() {
+        String file = "invalid_frames_qty_match.txt";
+        InvalidMatchException invalidMatchException = assertThrows(InvalidMatchException.class,
+                () -> builder.build(Thread.currentThread().getContextClassLoader().getResource(file).getPath()));
+        assertEquals(invalidMatchException.getMessage(), RuleError.INVALID_FRAMES_QTY.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should throws InvalidMatchException for RuleError.INVALID_FILE_DATA")
+    public void should_throws_invalid_match_exception_for_file_data() {
+        String file = "invalid_data_match.txt";
+        InvalidMatchException invalidMatchException = assertThrows(InvalidMatchException.class,
+                () -> builder.build(Thread.currentThread().getContextClassLoader().getResource(file).getPath()));
+        assertEquals(invalidMatchException.getMessage(), RuleError.INVALID_FILE_DATA.getMessage());
     }
 
     @Test
